@@ -7,7 +7,7 @@ const roomSchema = new Schema({
         type: String,
         required: true
     },
-    max: {
+    number: {
         type: Number,
         required: true,
         default: 10,

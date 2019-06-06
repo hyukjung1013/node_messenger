@@ -18,36 +18,68 @@
                     <th>Number</th>
                     <th>Owner</th>
                 </tr>
-                <tr>
-                    <td>Studying Node</td>
-                    <td>Private</td>
-                    <td>4</td>
-                    <td>Yologrammer</td>
-                    <td class="enter_btn_wrapper"><button class="enter_btn">Enter</button></td>
-                </tr>
-                <tr>
-                    <td>EPL Preview</td>
-                    <td>Public</td>
-                    <td>10</td>
-                    <td>Ronaldo</td>
-                    <td class="enter_btn_wrapper"><button class="enter_btn">Enter</button></td>
-                </tr>
-                <tr>
-                    <td>EPL Preview</td>
-                    <td>Public</td>
-                    <td>10</td>
-                    <td>Ronaldo</td>
-                    <td class="enter_btn_wrapper"><button class="enter_btn">Enter</button></td>
-                </tr>
-                <tr>
-                    <td>EPL Preview</td>
-                    <td>Public</td>
-                    <td>10</td>
-                    <td>Ronaldo</td>
-                    <td class="enter_btn_wrapper"><button class="enter_btn">Enter</button></td>
-                </tr>
+                <% for (room of rooms) { %>
+                    <tr data-id="<%=room._id%>">
+                        <td><%=room.title%></td>
+                        <td><%=room.password ? 'private' : 'public' %></td>
+                        <td><%=room.number%></td>
+                        <td><%=room.owner%></td>
+                        <td class="enter_btn_wrapper">
+                            <% var password = room.password ? 'true' : 'false' %>
+                            <button data-id="<%=room._id%>" data-password="<%=password%>" class="enter_btn">Enter</button>
+                        </td>
+                    </tr>
+                <% } %>
             </table>
         </div>
         <a id="btn" href="/create_room">Create Chat Room</a>
     </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        [].forEach.call(document.querySelectorAll('.enter_btn'), function(btn) {
+            btn.addEventListener('click', addBtnEvent);
+        } );
+        var socket = io.connect('http://localhost:9004/room', {
+            path: '/socket.io'
+        });
+        socket.on('newRoom', function(data) {
+            var tr = document.createElement('tr');
+            var td = document.createElement('td');
+            td.textContent = data.title;
+            tr.appendChild(td);
+            td = document.createElement('td');
+            td.textContent = data.password ? 'private' : 'public';
+            tr.appendChild(td);
+            td = document.createElement('td');
+            td.textContent = data.number;
+            tr.appendChild(td);
+            td = document.createElement('td');
+            td.textContent = data.owner;
+            tr.appendChild(td);
+            var button = document.createElement('button');
+            button.textContent = 'Enter';
+            button.dataset.id = data._id;
+            button.dataset.password = data.password ? 'true' : 'false';
+            button.setAttribute("class", "enter_btn");
+            button.addEventListener('click', addBtnEvent);
+            
+            td = document.createElement('td');
+            td.setAttribute("class", "enter_btn_wrapper");
+            td.append(button);
+            tr.appendChild(td);
+            tr.dataset.id = data._id;
+            document.querySelector('#table').appendChild(tr);
+        });
+        function addBtnEvent(event) {
+            if(event.target.dataset.password === 'true') {
+                const password = prompt('Enter the password.');
+                location.href = `/room/${event.target.dataset.id}?password=${password}`;
+            } else {
+                location.href = `/room/${event.target.dataset.id}`;
+            }
+        }
+        socket.on('removeRoom', function(data) {
+        });
+    </script>
 </body>
