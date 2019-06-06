@@ -10,29 +10,93 @@
 
         <div id="nav">
             <div id="room">Study Room</div>
-            <div id="out"><a>Out</a></div>
+            <div id="out"><a href="/">Out</a></div>
             <div class="block"></div>
         </div>
 
         <div id="content">
-            <div class="msg">He entered.</div>
-            <div class="left">
-                <div class="name-left">Ronaldo</div>
-                <div class="content-left">Hello world!!!</div>
-            </div>
-            <div class="right">
-                <div class="name-right">Ronaldo</div>
-                <div class="content-right">Hello world!!!</div>
-            </div>
-            <div class="block"></div>
+            <% for ( chat of chats ) { %>
+                <% if( chat.user === user ) { %>
+                    <div class="right">
+                        <div class="content-right"><%=chat.chat%></div>
+                    </div>
+                <% } else if ( chat.user === 'system') { %>
+                    <div class="msg"><%=chat.chat%></div>
+                <% } else { %> 
+                    <div class="left">
+                        <div class="name-left"><%=chat.user%></div>
+                        <div class="content-left"><%=chat.chat%></div>
+                    </div> 
+                <% } %>
+            <% } %>
         </div>
+
         <div id="input">
-            <form>
-                <textarea id="textarea"></textarea>
-                <input id="img-btn" type="file"/>
+            <form id="chat-form" action="/room" method="post" enctype="multipart/form-data">
+                <textarea id="chat" name="chat"></textarea>
+                <input id="img-btn" type="file" name="img" accept="image/gif"/>
                 <button id="post-btn">Send</button>
                 <div class="block"></div>
             </form>
         </div>
     </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        var socket = io.connect('http://localhost:9004/chat', {
+            path: '/socket.io'
+        });
+        socket.on('join', function(data) {
+            var div = document.createElement('div');
+            div.textContent = data.chat;
+            document.querySelector('#content').appendChild(div);
+            div.setAttribute('class', 'msg');
+        });
+        socket.on('exit', function(data) {
+            var div = document.createElement('div');
+            div.textContent = data.chat;
+            document.querySelector('#content').appendChild(div);
+            div.setAttribute('class', 'msg');
+        });
+        socket.on('chat', function(data) {
+            var name = document.createElement('div');
+            name.textContent = data.user;
+            var content = document.createElement('div');
+            content.textContent = data.chat;
+            var wrapper = document.createElement('div');
+            wrapper.appendChild(name);
+            wrapper.appendChild(content);
+            document.querySelector('#content').appendChild(wrapper);
+            if (data.user === '<%=user%>') {
+                wrapper.setAttribute('class', 'right');
+                name.setAttribute('style', 'display: none');
+                content.setAttribute('class', 'content-right');
+            } else {
+                wrapper.setAttribute('class', 'left');
+                name.setAttribute('class', 'name-left');
+                content.setAttribute('class', 'content-left');
+            }
+        });
+    </script>
+
+    <script>
+        document.querySelector('#chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (event.target.chat.value) {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        event.target.chat.value = '';
+                    } else {
+                        console.error(xhr.responseText);
+                    }
+                };
+                xhr.open('POST', `/room/<%=room._id%>/chat`);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify( { chat: this.chat.value } ));
+            }
+        });
+    </script>
+
 </body>

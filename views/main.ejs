@@ -71,6 +71,7 @@
             tr.dataset.id = data._id;
             document.querySelector('#table').appendChild(tr);
         });
+
         function addBtnEvent(event) {
             if(event.target.dataset.password === 'true') {
                 const password = prompt('Enter the password.');
@@ -79,7 +80,17 @@
                 location.href = `/room/${event.target.dataset.id}`;
             }
         }
+        
         socket.on('removeRoom', function(data) {
+                [].forEach.call(document.querySelectorAll('#table tr'), function(tr) {
+                if(tr.dataset.id === data) {
+                    tr.parentNode.removeChild(tr);
+                }
+            } );
         });
+
+        [].forEach.call(document.querySelectorAll('.enter_btn'), function(btn) {
+            btn.addEventListener('click', addBtnEvent);
+        } );
     </script>
 </body>
