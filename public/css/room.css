@@ -1,0 +1,141 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: rgb(240, 240, 240);
+}
+
+.container {
+    width: 800px;
+    margin: 50px auto;
+    border: 1px solid rgb(200, 255, 212);
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+#nav {
+    background: rgb(200, 255, 212);
+    padding: 10px 20px 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#room {
+    display: inline;
+    float: left;
+}
+
+#out{
+    background: black;
+    color: rgb(200, 255, 212);
+    border-radius: 5px;
+    display: inline;
+    float: right;
+    font-size: 15px;
+    padding: 4px;
+}
+
+.block {
+    clear: both;
+}
+
+#content {
+    border: 3px solid rgb(200, 255, 212);
+    background: rgb(255, 255, 255);
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+#btn {
+    display: block;
+    background: rgb(0, 0, 0);
+    color: rgb(200, 255, 212);
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#input {
+    border-radius: 5px;
+    padding: 20px;
+    background: rgb(200, 255, 212);
+}
+
+#textarea {
+    width: 100%;
+    height: 80px;
+    border-radius: 5px;
+}
+
+#img-btn {
+    margin-top: 10px;
+    float: left;
+}
+
+#post-btn {
+    margin-top: 10px;
+    float: right;
+    background: rgb(0, 0, 0);
+    color: rgb(200, 255, 212);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.msg {
+    text-align: center;
+    padding: 5px 0px 5px 0px;
+    margin-bottom: 10px;
+
+}
+
+.left {
+    display: inline;
+    width: 70%;
+    float: left;
+    clear: both;
+    margin: 5px 0px 5px 0px;
+}
+
+.right {
+    display: inline;
+    width: 70%;
+    float: right;
+    clear: both;
+    margin: 5px 0px 5px 0px;
+}
+
+.name-left {
+    text-align: left;
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+.content-left {
+    background: rgb(230, 230, 230);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.name-right {
+    text-align: right;
+    font-weight: bold;
+    margin-right: 2px;
+}
+
+.content-right {
+    background: rgb(200, 255, 212);
+    border-radius: 5px;
+    padding: 5px;
+}
